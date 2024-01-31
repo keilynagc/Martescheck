@@ -8,6 +8,5 @@ namespace ProyectoWeb_Martes.Models
     public class UsuarioModel
     {
 
-
     }
 }
