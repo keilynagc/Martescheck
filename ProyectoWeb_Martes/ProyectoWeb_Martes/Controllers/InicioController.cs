@@ -1,12 +1,10 @@
-﻿using ProyectoWeb_Martes.Models;
+﻿using ProyectoWeb_Martes.Entidades;
 using System.Web.Mvc;
 
 namespace ProyectoWeb_Martes.Controllers
 {
     public class InicioController : Controller
     {
-        UsuarioModel modelo = new UsuarioModel();
-
         [HttpGet]
         public ActionResult IniciarSesion()
         {
@@ -14,7 +12,7 @@ namespace ProyectoWeb_Martes.Controllers
         }
 
         [HttpPost]
-        public ActionResult IniciarSesionXYZ()
+        public ActionResult IniciarSesion(Usuario entidad)
         {
             return RedirectToAction("PantallaPrincipal", "Inicio");
         }
@@ -26,11 +24,25 @@ namespace ProyectoWeb_Martes.Controllers
             return View();
         }
 
+        [HttpPost]
+        public ActionResult RegistrarUsuario(Usuario entidad)
+        {
+            return View();
+        }
+
+
         [HttpGet]
         public ActionResult RecuperarAcceso()
         {
             return View();
         }
+
+        [HttpPost]
+        public ActionResult RecuperarAcceso(Usuario entidad)
+        {
+            return View();
+        }
+
 
         [HttpGet]
         public ActionResult PantallaPrincipal()

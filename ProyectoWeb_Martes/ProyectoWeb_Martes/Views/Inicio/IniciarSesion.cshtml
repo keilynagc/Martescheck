@@ -1,13 +1,13 @@
-﻿@{
+﻿@model ProyectoWeb_Martes.Entidades.Usuario
+
+@{
     ViewBag.Title = "IniciarSesion";
     Layout = "~/Views/Shared/_LayoutExterno.cshtml";
 }
 
 <div class="container">
-
     <div class="row justify-content-center" style="margin-top:5%">
         <div class="col-xl-10 col-lg-12 col-md-9">
-
             <div class="card o-hidden border-0 shadow-lg my-5">
                 <div class="card-body p-0">
                     <div class="row">
@@ -18,16 +18,13 @@
                                 <h3 class="h4 text-gray-900 mb-4">Iniciar Sesión</h3>
                               </div>
 
-                               @using(Html.BeginForm("IniciarSesionXYZ","Inicio"))
+                               @using(Html.BeginForm("IniciarSesion", "Inicio"))
                                {
-                                    <div class="form-group">
-                                        <input type="email" class="form-control form-control-user"
-                                               id="exampleInputEmail" aria-describedby="emailHelp"
-                                               placeholder="Identificación">
+                                    <div class="form-group">                                       
+                                        @Html.TextBoxFor(m => m.Identificacion, new { @class="form-control form-control-user", @placeholder = "Identificación" })
                                     </div>
                                     <div class="form-group">
-                                        <input type="password" class="form-control form-control-user"
-                                               id="exampleInputPassword" placeholder="Contraseña">
+                                        @Html.PasswordFor(m => m.Contrasenna, new { @class = "form-control form-control-user", @placeholder = "Contraseña" })
                                     </div>
 
                                     <input type="submit" class="btn btn-primary btn-user btn-block" value="Procesar">
@@ -45,9 +42,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
-
     </div>
-
 </div>
