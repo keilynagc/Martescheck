@@ -69,5 +69,18 @@ namespace ProyectoApi_Martes.Models
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("RegistrarUsuario2", identificacionParameter, contrasennaParameter, nombreParameter, correoElectronicoParameter);
         }
+    
+        public virtual ObjectResult<IniciarSesionUsuario_Result> IniciarSesionUsuario(string identificacion, string contrasenna)
+        {
+            var identificacionParameter = identificacion != null ?
+                new ObjectParameter("Identificacion", identificacion) :
+                new ObjectParameter("Identificacion", typeof(string));
+    
+            var contrasennaParameter = contrasenna != null ?
+                new ObjectParameter("Contrasenna", contrasenna) :
+                new ObjectParameter("Contrasenna", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<IniciarSesionUsuario_Result>("IniciarSesionUsuario", identificacionParameter, contrasennaParameter);
+        }
     }
 }
