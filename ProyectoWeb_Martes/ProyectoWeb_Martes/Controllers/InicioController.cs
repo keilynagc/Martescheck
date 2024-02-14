@@ -19,10 +19,13 @@ namespace ProyectoWeb_Martes.Controllers
         {
             var respuesta = modelo.IniciarSesionUsuario(entidad);
 
-            if (respuesta.Count > 0)
+            if (respuesta.Codigo == 0)
                 return RedirectToAction("PantallaPrincipal", "Inicio");
-
-            return View();
+            else
+            {
+                ViewBag.MsjPantalla = respuesta.Detalle;
+                return View();
+            }
         }
 
 
@@ -37,10 +40,13 @@ namespace ProyectoWeb_Martes.Controllers
         {
             var respuesta = modelo.RegistrarUsuario(entidad);
 
-            if (respuesta > 0)
+            if (respuesta.Codigo == 0)
                 return RedirectToAction("IniciarSesion", "Inicio");
-
-            return View();
+            else
+            {
+                ViewBag.MsjPantalla = respuesta.Detalle;
+                return View();
+            }
         }
 
 
