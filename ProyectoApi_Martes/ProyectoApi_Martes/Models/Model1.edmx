@@ -4,10 +4,14 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="martes_dbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="martes_dbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <Function Name="IniciarSesionUsuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Identificacion" Type="varchar" Mode="In" />
           <Parameter Name="Contrasenna" Type="varchar" Mode="In" />
+        </Function>
+        <Function Name="RecuperarAccesoUsuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Identificacion" Type="varchar" Mode="In" />
+          <Parameter Name="CorreoElectronico" Type="varchar" Mode="In" />
         </Function>
         <Function Name="RegistrarUsuario" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Identificacion" Type="varchar" Mode="In" />
@@ -16,26 +20,25 @@
           <Parameter Name="CorreoElectronico" Type="varchar" Mode="In" />
         </Function>
         <EntityContainer Name="martes_dbModelStoreContainer" />
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="martes_dbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="martes_dbEntities" annotation:LazyLoadingEnabled="true" >
+          <FunctionImport Name="IniciarSesionUsuario" ReturnType="Collection(martes_dbModel.IniciarSesionUsuario_Result)">
+            <Parameter Name="Identificacion" Mode="In" Type="String" />
+            <Parameter Name="Contrasenna" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="RecuperarAccesoUsuario" ReturnType="Collection(martes_dbModel.RecuperarAccesoUsuario_Result)">
+            <Parameter Name="Identificacion" Mode="In" Type="String" />
+            <Parameter Name="CorreoElectronico" Mode="In" Type="String" />
+          </FunctionImport>
           <FunctionImport Name="RegistrarUsuario">
             <Parameter Name="Identificacion" Mode="In" Type="String" />
             <Parameter Name="Contrasenna" Mode="In" Type="String" />
             <Parameter Name="Nombre" Mode="In" Type="String" />
             <Parameter Name="CorreoElectronico" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="RegistrarUsuario2">
-            <Parameter Name="Identificacion" Mode="In" Type="String" />
-            <Parameter Name="Contrasenna" Mode="In" Type="String" />
-            <Parameter Name="Nombre" Mode="In" Type="String" />
-            <Parameter Name="CorreoElectronico" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="IniciarSesionUsuario" ReturnType="Collection(martes_dbModel.IniciarSesionUsuario_Result)">
-            <Parameter Name="Identificacion" Mode="In" Type="String" />
-            <Parameter Name="Contrasenna" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="IniciarSesionUsuario_Result">
@@ -45,6 +48,18 @@
           <Property Type="String" Name="Nombre" Nullable="false" MaxLength="200" />
           <Property Type="String" Name="CorreoElectronico" Nullable="false" MaxLength="200" />
           <Property Type="Boolean" Name="Estado" Nullable="false" />
+          <Property Type="Boolean" Name="Temporal" Nullable="false" />
+          <Property Type="DateTime" Name="Vencimiento" Nullable="false" Precision="23" />
+        </ComplexType>
+        <ComplexType Name="RecuperarAccesoUsuario_Result">
+          <Property Type="Int64" Name="Consecutivo" Nullable="false" />
+          <Property Type="String" Name="Identificacion" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="Contrasenna" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="200" />
+          <Property Type="String" Name="CorreoElectronico" Nullable="false" MaxLength="200" />
+          <Property Type="Boolean" Name="Estado" Nullable="false" />
+          <Property Type="Boolean" Name="Temporal" Nullable="false" />
+          <Property Type="DateTime" Name="Vencimiento" Nullable="false" Precision="23" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -52,7 +67,6 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="martes_dbModelStoreContainer" CdmEntityContainer="martes_dbEntities" >
-          <FunctionImportMapping FunctionImportName="RegistrarUsuario" FunctionName="martes_dbModel.Store.RegistrarUsuario" />
           <FunctionImportMapping FunctionImportName="IniciarSesionUsuario" FunctionName="martes_dbModel.Store.IniciarSesionUsuario">
             <ResultMapping>
               <ComplexTypeMapping TypeName="martes_dbModel.IniciarSesionUsuario_Result">
@@ -62,9 +76,26 @@
                 <ScalarProperty Name="Nombre" ColumnName="Nombre" />
                 <ScalarProperty Name="CorreoElectronico" ColumnName="CorreoElectronico" />
                 <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="Temporal" ColumnName="Temporal" />
+                <ScalarProperty Name="Vencimiento" ColumnName="Vencimiento" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="RecuperarAccesoUsuario" FunctionName="martes_dbModel.Store.RecuperarAccesoUsuario">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="martes_dbModel.RecuperarAccesoUsuario_Result">
+                <ScalarProperty Name="Consecutivo" ColumnName="Consecutivo" />
+                <ScalarProperty Name="Identificacion" ColumnName="Identificacion" />
+                <ScalarProperty Name="Contrasenna" ColumnName="Contrasenna" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="CorreoElectronico" ColumnName="CorreoElectronico" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="Temporal" ColumnName="Temporal" />
+                <ScalarProperty Name="Vencimiento" ColumnName="Vencimiento" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="RegistrarUsuario" FunctionName="martes_dbModel.Store.RegistrarUsuario" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
