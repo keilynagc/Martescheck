@@ -13,28 +13,31 @@
           <div class="row">
             <div class="col-lg-3 d-none d-lg-block"></div>
             <div class="col-lg-6">
-              <div class="p-5">
-                <div class="text-center">
-                  <h3 class="h4 text-gray-900 mb-4">Recuperar Acceso</h3>
-                </div>
+                <div class="p-5">
+                    <div class="text-center">
+                        <h3 class="h4 text-gray-900 mb-4">Recuperar Acceso</h3>
+                    </div>
 
-                @using (Html.BeginForm("RecuperarAcceso", "Inicio"))
-                {
-                  <div class="form-group">
-                    @Html.TextBoxFor(m => m.Identificacion, new { @class = "form-control form-control-user", @placeholder = "Identificación" })
-                  </div>
+                    @using (Html.BeginForm("RecuperarAcceso", "Inicio", FormMethod.Post))
+                    {
+                        <div class="form-group">
+                            @Html.TextBoxFor(m => m.Identificacion, new { @class = "form-control form-control-user", @placeholder = "Identificación", @required = "true" })
+                        </div>
+                        <div class="form-group">
+                            @Html.TextBoxFor(m => m.CorreoElectronico, new { @class = "form-control form-control-user", @placeholder = "Correo Electrónico", @type = "Email", @required = "true" })
+                        </div>
 
-                  <input type="submit" class="btn btn-primary btn-user btn-block" value="Procesar">
-                }
+                        <input type="submit" class="btn btn-primary btn-user btn-block" value="Procesar">
+                    }
 
-                <hr>
-                <div class="text-center">
-                  <a class="small" href="@Url.Action("IniciarSesion","Inicio")">Iniciar Sesión</a>
+                    <hr>
+                    <div class="text-center">
+                        <a class="small" href="@Url.Action("IniciarSesion","Inicio")">Iniciar Sesión</a>
+                    </div>
+                    <div class="text-center">
+                        <a class="small" href="@Url.Action("RegistrarUsuario","Inicio")">Crear cuenta</a>
+                    </div>
                 </div>
-                <div class="text-center">
-                  <a class="small" href="@Url.Action("RegistrarUsuario","Inicio")">Crear cuenta</a>
-                </div>
-              </div>
             </div>
           </div>
         </div>

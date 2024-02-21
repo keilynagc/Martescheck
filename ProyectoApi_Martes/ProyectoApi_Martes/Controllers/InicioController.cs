@@ -3,6 +3,7 @@ using ProyectoApi_Martes.Models;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Net.Mail;
 using System.Web.Http;
@@ -11,6 +12,8 @@ namespace ProyectoApi_Martes.Controllers
 {
     public class InicioController : ApiController
     {
+        UtilitariosModel model = new UtilitariosModel();
+
         [HttpPost]
         [Route("Inicio/RegistrarUsuario")]
         public Confirmacion RegistrarUsuario(Usuario entidad)
@@ -58,9 +61,17 @@ namespace ProyectoApi_Martes.Controllers
 
                     if (datos != null)
                     {
-                        respuesta.Codigo = 0;
-                        respuesta.Detalle = string.Empty;
-                        respuesta.Dato = datos;
+                        if (datos.Temporal && DateTime.Now > datos.Vencimiento)
+                        {
+                            respuesta.Codigo = -1;
+                            respuesta.Detalle = "Su contraseña temporal ha caducado";
+                        }
+                        else
+                        {
+                            respuesta.Codigo = 0;
+                            respuesta.Detalle = string.Empty;
+                            respuesta.Dato = datos;
+                        }
                     }
                     else
                     {
@@ -92,7 +103,12 @@ namespace ProyectoApi_Martes.Controllers
 
                     if (datos != null)
                     {
-                        EnviarCorreo(datos.CorreoElectronico, "Acceso Temporal", datos.Contrasenna);
+                        string ruta = AppDomain.CurrentDomain.BaseDirectory + "Password.html";
+                        string contenido = File.ReadAllText(ruta);
+                        contenido = contenido.Replace("@@Nombre", datos.Nombre);
+                        contenido = contenido.Replace("@@Contrasenna", datos.Contrasenna);
+                        contenido = contenido.Replace("@@Vencimiento", datos.Vencimiento.ToString("dd/MM/yyyy hh:mm:ss tt"));
+                        model.EnviarCorreo(datos.CorreoElectronico, "Acceso Temporal", contenido);
 
                         respuesta.Codigo = 0;
                         respuesta.Detalle = string.Empty;
@@ -112,23 +128,5 @@ namespace ProyectoApi_Martes.Controllers
 
             return respuesta;
         }
-
-        private void EnviarCorreo(string destino, string asunto, string contenido)
-        {
-            MailMessage message = new MailMessage();
-            message.From = new MailAddress(ConfigurationManager.AppSettings["cuentaCorreo"]);
-            message.To.Add(new MailAddress(destino));
-            message.Subject = asunto;
-            message.Body = contenido;
-            message.Priority = MailPriority.Normal;
-            message.IsBodyHtml = true;
-
-            SmtpClient client = new SmtpClient("smtp.office365.com", 587);
-            client.Credentials = new System.Net.NetworkCredential(ConfigurationManager.AppSettings["cuentaCorreo"], 
-                                                                  ConfigurationManager.AppSettings["claveCorreo"]);
-            client.EnableSsl = true;
-            client.Send(message);
-        }
-
     }
 }
