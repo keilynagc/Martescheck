@@ -9,6 +9,7 @@ using System.Web.Mvc;
 namespace ProyectoWeb_Martes.Controllers
 {
     [FiltroSeguridad]
+    [FiltroAdmin]
     public class ProductoController : Controller
     {
         ProductoModel modelo = new ProductoModel();

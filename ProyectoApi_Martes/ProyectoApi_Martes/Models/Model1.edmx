@@ -66,6 +66,7 @@
           <Property Type="Boolean" Name="Estado" Nullable="false" />
           <Property Type="Boolean" Name="Temporal" Nullable="false" />
           <Property Type="DateTime" Name="Vencimiento" Nullable="false" Precision="23" />
+          <Property Type="Int64" Name="ConsecutivoRol" Nullable="false" />
         </ComplexType>
         <ComplexType Name="RecuperarAccesoUsuario_Result">
           <Property Type="Int64" Name="Consecutivo" Nullable="false" />
@@ -108,6 +109,7 @@
                 <ScalarProperty Name="Estado" ColumnName="Estado" />
                 <ScalarProperty Name="Temporal" ColumnName="Temporal" />
                 <ScalarProperty Name="Vencimiento" ColumnName="Vencimiento" />
+                <ScalarProperty Name="ConsecutivoRol" ColumnName="ConsecutivoRol" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

@@ -32,6 +32,16 @@ CREATE TABLE [dbo].[tProducto](
 ) ON [PRIMARY]
 GO
 
+CREATE TABLE [dbo].[tRol](
+	[ConsecutivoRol] [bigint] IDENTITY(1,1) NOT NULL,
+	[NombreRol] [varchar](50) NOT NULL,
+ CONSTRAINT [PK_tRol] PRIMARY KEY CLUSTERED 
+(
+	[ConsecutivoRol] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
 CREATE TABLE [dbo].[tUsuario](
 	[Consecutivo] [bigint] IDENTITY(1,1) NOT NULL,
 	[Identificacion] [varchar](20) NOT NULL,
@@ -41,6 +51,7 @@ CREATE TABLE [dbo].[tUsuario](
 	[Estado] [bit] NOT NULL,
 	[Temporal] [bit] NOT NULL,
 	[Vencimiento] [datetime] NOT NULL,
+	[ConsecutivoRol] [bigint] NOT NULL,
  CONSTRAINT [PK_tUsuario] PRIMARY KEY CLUSTERED 
 (
 	[Consecutivo] ASC
@@ -70,9 +81,18 @@ GO
 SET IDENTITY_INSERT [dbo].[tProducto] OFF
 GO
 
+SET IDENTITY_INSERT [dbo].[tRol] ON 
+GO
+INSERT [dbo].[tRol] ([ConsecutivoRol], [NombreRol]) VALUES (1, N'Administrador')
+GO
+INSERT [dbo].[tRol] ([ConsecutivoRol], [NombreRol]) VALUES (2, N'Usuario')
+GO
+SET IDENTITY_INSERT [dbo].[tRol] OFF
+GO
+
 SET IDENTITY_INSERT [dbo].[tUsuario] ON 
 GO
-INSERT [dbo].[tUsuario] ([Consecutivo], [Identificacion], [Contrasenna], [Nombre], [CorreoElectronico], [Estado], [Temporal], [Vencimiento]) VALUES (1, N'305070199', N'B20ED438', N'CAMACHO MONGE TIFANNY ANDREA', N'tcamacho70199@ufide.ac.cr', 1, 1, CAST(N'2024-02-20T20:14:54.033' AS DateTime))
+INSERT [dbo].[tUsuario] ([Consecutivo], [Identificacion], [Contrasenna], [Nombre], [CorreoElectronico], [Estado], [Temporal], [Vencimiento], [ConsecutivoRol]) VALUES (1, N'117360383', N'60383', N'AGUERO CALVO KEILYN PAOLA', N'kaguero60383@ufide.ac.cr', 1, 0, CAST(N'2024-03-05T19:39:45.190' AS DateTime), 2)
 GO
 SET IDENTITY_INSERT [dbo].[tUsuario] OFF
 GO
@@ -87,6 +107,12 @@ ALTER TABLE [dbo].[tProducto]  WITH CHECK ADD  CONSTRAINT [FK_tProducto_tCategor
 REFERENCES [dbo].[tCategoria] ([IdCategoria])
 GO
 ALTER TABLE [dbo].[tProducto] CHECK CONSTRAINT [FK_tProducto_tCategorias]
+GO
+
+ALTER TABLE [dbo].[tUsuario]  WITH CHECK ADD  CONSTRAINT [FK_tUsuario_tRol] FOREIGN KEY([ConsecutivoRol])
+REFERENCES [dbo].[tRol] ([ConsecutivoRol])
+GO
+ALTER TABLE [dbo].[tUsuario] CHECK CONSTRAINT [FK_tUsuario_tRol]
 GO
 
 CREATE PROCEDURE [dbo].[ConsultarProductos]
@@ -117,7 +143,7 @@ CREATE PROCEDURE [dbo].[IniciarSesionUsuario]
 AS
 BEGIN
 
-	SELECT	Consecutivo,Identificacion,Contrasenna,Nombre,CorreoElectronico,Estado,Temporal,Vencimiento
+	SELECT	Consecutivo,Identificacion,Contrasenna,Nombre,CorreoElectronico,Estado,Temporal,Vencimiento,ConsecutivoRol
 	FROM	dbo.tUsuario
 	WHERE	Identificacion = @Identificacion
 		AND Contrasenna = @Contrasenna
@@ -166,8 +192,8 @@ BEGIN
 	IF NOT EXISTS(SELECT 1 FROM dbo.tUsuario WHERE Identificacion = @Identificacion)
 	BEGIN
 
-		INSERT INTO dbo.tUsuario(Identificacion,Contrasenna,Nombre,CorreoElectronico,Estado,Temporal,Vencimiento)
-		VALUES (@Identificacion,@Contrasenna,@Nombre,@CorreoElectronico,1,0,GETDATE())
+		INSERT INTO dbo.tUsuario(Identificacion,Contrasenna,Nombre,CorreoElectronico,Estado,Temporal,Vencimiento,ConsecutivoRol)
+		VALUES (@Identificacion,@Contrasenna,@Nombre,@CorreoElectronico,1,0,GETDATE(),2)
 
 	END
 

@@ -22,6 +22,7 @@ namespace ProyectoWeb_Martes.Controllers
             if (respuesta.Codigo == 0)
             {
                 Session["NombreUsuario"] = respuesta.Dato.Nombre;
+                Session["RolUsuario"] = respuesta.Dato.ConsecutivoRol;
                 return RedirectToAction("PantallaPrincipal", "Inicio");
             }
             else
