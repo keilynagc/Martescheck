@@ -72,11 +72,7 @@ GO
 
 SET IDENTITY_INSERT [dbo].[tProducto] ON 
 GO
-INSERT [dbo].[tProducto] ([Consecutivo], [Nombre], [Precio], [Inventario], [Estado], [RutaImagen], [IdCategoria]) VALUES (1, N'Mouse', CAST(5000.00 AS Decimal(10, 2)), 5, 1, N'PRUEBA', 1)
-GO
-INSERT [dbo].[tProducto] ([Consecutivo], [Nombre], [Precio], [Inventario], [Estado], [RutaImagen], [IdCategoria]) VALUES (2, N'Intel', CAST(30000.00 AS Decimal(10, 2)), 3, 1, N'PRUEBA', 2)
-GO
-INSERT [dbo].[tProducto] ([Consecutivo], [Nombre], [Precio], [Inventario], [Estado], [RutaImagen], [IdCategoria]) VALUES (3, N'SSD', CAST(15000.00 AS Decimal(10, 2)), 0, 1, N'PRUEBA', 3)
+INSERT [dbo].[tProducto] ([Consecutivo], [Nombre], [Precio], [Inventario], [Estado], [RutaImagen], [IdCategoria]) VALUES (8, N'Mouse con RGB 3', CAST(12000.00 AS Decimal(10, 2)), 8, 1, N'/ImgProductos/8.png', 1)
 GO
 SET IDENTITY_INSERT [dbo].[tProducto] OFF
 GO
@@ -92,7 +88,7 @@ GO
 
 SET IDENTITY_INSERT [dbo].[tUsuario] ON 
 GO
-INSERT [dbo].[tUsuario] ([Consecutivo], [Identificacion], [Contrasenna], [Nombre], [CorreoElectronico], [Estado], [Temporal], [Vencimiento], [ConsecutivoRol]) VALUES (1, N'117360383', N'60383', N'AGUERO CALVO KEILYN PAOLA', N'kaguero60383@ufide.ac.cr', 1, 0, CAST(N'2024-03-05T19:39:45.190' AS DateTime), 2)
+INSERT [dbo].[tUsuario] ([Consecutivo], [Identificacion], [Contrasenna], [Nombre], [CorreoElectronico], [Estado], [Temporal], [Vencimiento], [ConsecutivoRol]) VALUES (1, N'117360383', N'60383', N'AGUERO CALVO KEILYN PAOLA', N'kaguero60383@ufide.ac.cr', 1, 0, CAST(N'2024-03-05T19:39:45.190' AS DateTime), 1)
 GO
 SET IDENTITY_INSERT [dbo].[tUsuario] OFF
 GO
@@ -115,6 +111,19 @@ GO
 ALTER TABLE [dbo].[tUsuario] CHECK CONSTRAINT [FK_tUsuario_tRol]
 GO
 
+CREATE PROCEDURE [dbo].[ActualizarImagenProducto]
+	@Consecutivo	BIGINT,
+	@RutaImagen		VARCHAR(200)
+AS
+BEGIN
+
+	UPDATE dbo.tProducto
+	SET RutaImagen = @RutaImagen
+	WHERE Consecutivo = @Consecutivo
+
+END
+GO
+
 CREATE PROCEDURE [dbo].[ConsultarProductos]
 	@MostrarTodos BIT
 AS
@@ -134,6 +143,17 @@ BEGIN
 		WHERE	Inventario > 0
 			AND Estado = 1
 	END
+END
+GO
+
+create PROCEDURE [dbo].[ConsultarTiposCategoria]
+
+AS
+BEGIN
+
+	SELECT	IdCategoria, Nombre 'NombreCategoria'
+	FROM	tCategoria
+
 END
 GO
 
@@ -177,6 +197,31 @@ BEGIN
 	SELECT	Consecutivo,Identificacion,Contrasenna,Nombre,CorreoElectronico,Estado,Temporal,Vencimiento
 	FROM	dbo.tUsuario
 	WHERE	Consecutivo = @Consecutivo
+
+END
+GO
+
+CREATE PROCEDURE [dbo].[RegistrarProducto]
+	@NombreProducto	VARCHAR(200),
+	@Precio			DECIMAL(10,2),
+	@Inventario		INT,
+	@IdCategoria	INT   
+AS
+BEGIN
+
+	IF NOT EXISTS(SELECT 1 FROM dbo.tProducto WHERE Nombre = @NombreProducto)
+	BEGIN
+
+		INSERT INTO dbo.tProducto(Nombre,Precio,Inventario,Estado,RutaImagen,IdCategoria)
+		VALUES (@NombreProducto,@Precio,@Inventario,1,'',@IdCategoria)
+
+		SELECT CONVERT(BIGINT,@@IDENTITY) Consecutivo
+
+	END
+	ELSE
+	BEGIN
+		SELECT CONVERT(BIGINT,-1) Consecutivo
+	END
 
 END
 GO
