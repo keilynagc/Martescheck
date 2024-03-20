@@ -339,6 +339,7 @@
     <Content Include="Views\Inicio\RecuperarAcceso.cshtml" />
     <Content Include="Views\Producto\ConsultaProductos.cshtml" />
     <Content Include="Views\Producto\RegistrarProducto.cshtml" />
+    <Content Include="Views\Producto\ActualizarProducto.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

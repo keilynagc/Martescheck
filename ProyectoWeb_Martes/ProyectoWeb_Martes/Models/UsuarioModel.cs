@@ -1,5 +1,4 @@
 ﻿using ProyectoWeb_Martes.Entidades;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Net.Http;
 using System.Net.Http.Json;

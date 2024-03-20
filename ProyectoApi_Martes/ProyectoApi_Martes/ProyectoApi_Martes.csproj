@@ -175,6 +175,9 @@
     <Compile Include="Models\ConsultarProductos_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ConsultarProducto_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ConsultarTiposCategoria_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>

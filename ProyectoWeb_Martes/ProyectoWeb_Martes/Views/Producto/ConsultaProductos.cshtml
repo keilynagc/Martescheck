@@ -26,7 +26,7 @@
                             <a class="btn btn-primary" href="@Url.Action("RegistrarProducto","Producto")"> + Agregar</a>
                         </div>
 
-                        <table class="table table-bordered dataTable" style="width: 100%;">
+                        <table id="myDataTable" class="table table-bordered dataTable" style="width: 100%;">
                             <thead>
                                 <tr role="row">
                                     <th>Código</th>
@@ -36,6 +36,7 @@
                                     <th>Imagen</th>
                                     <th>Categoría</th>
                                     <th>Estado</th>
+                                    <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -56,6 +57,10 @@
                                         {
                                             <td>Inactivo</td>
                                         }
+                                        <td style="text-align:center">
+                                          <a href="@Url.Action("ActualizarProducto","Producto", new { id = @item.Consecutivo })"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                                          <a href="@Url.Action("EliminarProducto","Producto", new { id = @item.Consecutivo })"><i class="fa fa-trash-o fa-2x"></i></a>
+                                        </td>
                                     </tr>
                                 }
                             </tbody>
@@ -67,3 +72,14 @@
         </div>
     </div>
 </div>
+
+<script src="~/Estilos/vendor/jquery/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#myDataTable').DataTable({
+            language: {
+                url: '//cdn.datatables.net/plug-ins/2.0.2/i18n/es-ES.json',
+            }
+        });
+    });
+</script>

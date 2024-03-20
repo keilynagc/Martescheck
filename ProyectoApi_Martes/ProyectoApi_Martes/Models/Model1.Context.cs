@@ -28,6 +28,53 @@ namespace ProyectoApi_Martes.Models
         }
     
     
+        public virtual int ActualizarImagenProducto(Nullable<long> consecutivo, string rutaImagen)
+        {
+            var consecutivoParameter = consecutivo.HasValue ?
+                new ObjectParameter("Consecutivo", consecutivo) :
+                new ObjectParameter("Consecutivo", typeof(long));
+    
+            var rutaImagenParameter = rutaImagen != null ?
+                new ObjectParameter("RutaImagen", rutaImagen) :
+                new ObjectParameter("RutaImagen", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ActualizarImagenProducto", consecutivoParameter, rutaImagenParameter);
+        }
+    
+        public virtual int ActualizarProducto(Nullable<long> consecutivo, string nombreProducto, Nullable<decimal> precio, Nullable<int> inventario, Nullable<int> idCategoria)
+        {
+            var consecutivoParameter = consecutivo.HasValue ?
+                new ObjectParameter("Consecutivo", consecutivo) :
+                new ObjectParameter("Consecutivo", typeof(long));
+    
+            var nombreProductoParameter = nombreProducto != null ?
+                new ObjectParameter("NombreProducto", nombreProducto) :
+                new ObjectParameter("NombreProducto", typeof(string));
+    
+            var precioParameter = precio.HasValue ?
+                new ObjectParameter("Precio", precio) :
+                new ObjectParameter("Precio", typeof(decimal));
+    
+            var inventarioParameter = inventario.HasValue ?
+                new ObjectParameter("Inventario", inventario) :
+                new ObjectParameter("Inventario", typeof(int));
+    
+            var idCategoriaParameter = idCategoria.HasValue ?
+                new ObjectParameter("IdCategoria", idCategoria) :
+                new ObjectParameter("IdCategoria", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ActualizarProducto", consecutivoParameter, nombreProductoParameter, precioParameter, inventarioParameter, idCategoriaParameter);
+        }
+    
+        public virtual ObjectResult<ConsultarProducto_Result> ConsultarProducto(Nullable<long> consecutivo)
+        {
+            var consecutivoParameter = consecutivo.HasValue ?
+                new ObjectParameter("Consecutivo", consecutivo) :
+                new ObjectParameter("Consecutivo", typeof(long));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ConsultarProducto_Result>("ConsultarProducto", consecutivoParameter);
+        }
+    
         public virtual ObjectResult<ConsultarProductos_Result> ConsultarProductos(Nullable<bool> mostrarTodos)
         {
             var mostrarTodosParameter = mostrarTodos.HasValue ?
@@ -110,17 +157,13 @@ namespace ProyectoApi_Martes.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("RegistrarUsuario", identificacionParameter, contrasennaParameter, nombreParameter, correoElectronicoParameter);
         }
     
-        public virtual int ActualizarImagenProducto(Nullable<long> consecutivo, string rutaImagen)
+        public virtual int EliminarProducto(Nullable<long> consecutivo)
         {
             var consecutivoParameter = consecutivo.HasValue ?
                 new ObjectParameter("Consecutivo", consecutivo) :
                 new ObjectParameter("Consecutivo", typeof(long));
     
-            var rutaImagenParameter = rutaImagen != null ?
-                new ObjectParameter("RutaImagen", rutaImagen) :
-                new ObjectParameter("RutaImagen", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ActualizarImagenProducto", consecutivoParameter, rutaImagenParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("EliminarProducto", consecutivoParameter);
         }
     }
 }

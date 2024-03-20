@@ -1,8 +1,5 @@
 ﻿using ProyectoApi_Martes.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace ProyectoApi_Martes.Entidades
 {

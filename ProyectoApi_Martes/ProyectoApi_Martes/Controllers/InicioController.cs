@@ -1,11 +1,8 @@
 ﻿using ProyectoApi_Martes.Entidades;
 using ProyectoApi_Martes.Models;
 using System;
-using System.Collections.Generic;
-using System.Configuration;
 using System.IO;
 using System.Linq;
-using System.Net.Mail;
 using System.Web.Http;
 
 namespace ProyectoApi_Martes.Controllers
@@ -24,7 +21,7 @@ namespace ProyectoApi_Martes.Controllers
             {
                 using (var db = new martes_dbEntities())
                 {
-                    var resp = db.RegistrarUsuario(entidad.Identificacion, entidad.Contrasenna, entidad.Nombre, entidad.CorreoElectronico);       
+                    var resp = db.RegistrarUsuario(entidad.Identificacion, entidad.Contrasenna, entidad.Nombre, entidad.CorreoElectronico);
 
                     if (resp > 0)
                     {
@@ -80,7 +77,7 @@ namespace ProyectoApi_Martes.Controllers
                     }
                 }
             }
-            catch (Exception )
+            catch (Exception)
             {
                 respuesta.Codigo = -1;
                 respuesta.Detalle = "Se presentó un error en el sistema";

@@ -1,8 +1,5 @@
 ﻿using ProyectoApi_Martes.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace ProyectoApi_Martes.Entidades
 {
@@ -22,7 +19,7 @@ namespace ProyectoApi_Martes.Entidades
     {
         public int Codigo { get; set; }
         public string Detalle { get; set; }
-        public List<ConsultarProductos_Result> Datos { get; set; }
-        public ConsultarProductos_Result Dato { get; set; }
+        public object Datos { get; set; }
+        public object Dato { get; set; }
     }
 }

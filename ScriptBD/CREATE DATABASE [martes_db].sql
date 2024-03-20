@@ -70,13 +70,6 @@ GO
 SET IDENTITY_INSERT [dbo].[tCategoria] OFF
 GO
 
-SET IDENTITY_INSERT [dbo].[tProducto] ON 
-GO
-INSERT [dbo].[tProducto] ([Consecutivo], [Nombre], [Precio], [Inventario], [Estado], [RutaImagen], [IdCategoria]) VALUES (8, N'Mouse con RGB 3', CAST(12000.00 AS Decimal(10, 2)), 8, 1, N'/ImgProductos/8.png', 1)
-GO
-SET IDENTITY_INSERT [dbo].[tProducto] OFF
-GO
-
 SET IDENTITY_INSERT [dbo].[tRol] ON 
 GO
 INSERT [dbo].[tRol] ([ConsecutivoRol], [NombreRol]) VALUES (1, N'Administrador')
@@ -124,6 +117,36 @@ BEGIN
 END
 GO
 
+CREATE PROCEDURE [dbo].[ActualizarProducto]
+	@Consecutivo	BIGINT,
+	@NombreProducto	VARCHAR(200),
+	@Precio			DECIMAL(10,2),
+	@Inventario		INT,
+	@IdCategoria	INT   
+AS
+BEGIN
+
+	UPDATE	dbo.tProducto
+	SET		Nombre = @NombreProducto,
+			Precio = @Precio,
+			Inventario = @Inventario,
+			IdCategoria = @IdCategoria
+	WHERE	Consecutivo = @Consecutivo
+
+END
+GO
+
+CREATE PROCEDURE [dbo].[ConsultarProducto]
+	@Consecutivo BIGINT
+AS
+BEGIN
+	SELECT	Consecutivo, P.Nombre 'NombreProducto', Precio, Inventario, Estado, RutaImagen, P.IdCategoria, C.Nombre 'NombreCategoria'
+	FROM	tProducto P
+	INNER JOIN	tCategoria C ON P.IdCategoria = C.IdCategoria
+	WHERE	Consecutivo = @Consecutivo
+END
+GO
+
 CREATE PROCEDURE [dbo].[ConsultarProductos]
 	@MostrarTodos BIT
 AS
@@ -146,7 +169,7 @@ BEGIN
 END
 GO
 
-create PROCEDURE [dbo].[ConsultarTiposCategoria]
+CREATE PROCEDURE [dbo].[ConsultarTiposCategoria]
 
 AS
 BEGIN
@@ -157,14 +180,27 @@ BEGIN
 END
 GO
 
+CREATE PROCEDURE [dbo].[EliminarProducto]
+	@Consecutivo	BIGINT
+AS
+BEGIN
+
+	UPDATE dbo.tProducto
+	SET Estado = 0
+	WHERE Consecutivo = @Consecutivo
+
+END
+GO
+
 CREATE PROCEDURE [dbo].[IniciarSesionUsuario]
 	@Identificacion		varchar(20),
     @Contrasenna		varchar(10)
 AS
 BEGIN
 
-	SELECT	Consecutivo,Identificacion,Contrasenna,Nombre,CorreoElectronico,Estado,Temporal,Vencimiento,ConsecutivoRol
-	FROM	dbo.tUsuario
+	SELECT	Consecutivo,Identificacion,Contrasenna,Nombre,CorreoElectronico,Estado,Temporal,Vencimiento,U.ConsecutivoRol,R.NombreRol
+	FROM	dbo.tUsuario U
+	INNER   JOIN dbo.tRol R ON U.ConsecutivoRol = R.ConsecutivoRol
 	WHERE	Identificacion = @Identificacion
 		AND Contrasenna = @Contrasenna
 		AND Estado = 1
