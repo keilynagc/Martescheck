@@ -4,6 +4,7 @@ using System.Web.Mvc;
 
 namespace ProyectoWeb_Martes.Controllers
 {
+    [OutputCache(NoStore = true, VaryByParam = "*", Duration = 0)]
     public class InicioController : Controller
     {
         UsuarioModel modelo = new UsuarioModel();
@@ -21,6 +22,7 @@ namespace ProyectoWeb_Martes.Controllers
 
             if (respuesta.Codigo == 0)
             {
+                Session["Consecutivo"] = respuesta.Dato.Consecutivo;
                 Session["NombreUsuario"] = respuesta.Dato.Nombre;
                 Session["RolUsuario"] = respuesta.Dato.ConsecutivoRol;
                 Session["NombreRol"] = respuesta.Dato.NombreRol;

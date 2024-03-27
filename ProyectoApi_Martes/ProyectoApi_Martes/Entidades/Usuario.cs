@@ -5,6 +5,7 @@ namespace ProyectoApi_Martes.Entidades
 {
     public class Usuario
     {
+        public long Consecutivo { get; set; }
         public string Identificacion { get; set; }
         public string Contrasenna { get; set; }
         public string Nombre { get; set; }
@@ -17,8 +18,8 @@ namespace ProyectoApi_Martes.Entidades
     {
         public int Codigo { get; set; }
         public string Detalle { get; set; }
-        public List<IniciarSesionUsuario_Result> Datos { get; set; }
-        public IniciarSesionUsuario_Result Dato { get; set; }
+        public object Datos { get; set; }
+        public object Dato { get; set; }
     }
 
 }
