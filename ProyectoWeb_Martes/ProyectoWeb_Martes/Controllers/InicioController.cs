@@ -1,5 +1,6 @@
 ﻿using ProyectoWeb_Martes.Entidades;
 using ProyectoWeb_Martes.Models;
+using System.Collections.Generic;
 using System.Web.Mvc;
 
 namespace ProyectoWeb_Martes.Controllers
@@ -8,6 +9,7 @@ namespace ProyectoWeb_Martes.Controllers
     public class InicioController : Controller
     {
         UsuarioModel modelo = new UsuarioModel();
+        ProductoModel productoModel = new ProductoModel();
 
         [HttpGet]
         public ActionResult IniciarSesion()
@@ -82,7 +84,15 @@ namespace ProyectoWeb_Martes.Controllers
         [HttpGet]
         public ActionResult PantallaPrincipal()
         {
-            return View();
+            var respuesta = productoModel.ConsultarProductos(false);
+
+            if (respuesta.Codigo == 0)
+                return View(respuesta.Datos);
+            else
+            {
+                ViewBag.MsjPantalla = respuesta.Detalle;
+                return View(new List<Producto>());
+            }
         }
 
 

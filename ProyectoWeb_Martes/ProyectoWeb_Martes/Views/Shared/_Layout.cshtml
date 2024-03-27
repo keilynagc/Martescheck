@@ -39,12 +39,27 @@
                     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
                             <a class="collapse-item" href="@Url.Action("ConsultaProductos","Producto")">Productos</a>
-                            <a class="collapse-item" href="cards.html">Cards</a>
+                            <a class="collapse-item" href="cards.html">Ventas</a>
                         </div>
                     </div>
                 </li>
             }
-
+            else
+            {
+                <li class="nav-item">
+                    <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseTwo"
+                       aria-expanded="true" aria-controls="collapseTwo">
+                        <i class="fa fa-tags"></i>
+                        <span>Compras</span>
+                    </a>
+                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a class="collapse-item" href="">Mi Carrito</a>
+                            <a class="collapse-item" href="">Mis Compras</a>
+                        </div>
+                    </div>
+                </li>
+            }
 
         </ul>
 

@@ -70,6 +70,21 @@ GO
 SET IDENTITY_INSERT [dbo].[tCategoria] OFF
 GO
 
+SET IDENTITY_INSERT [dbo].[tProducto] ON 
+GO
+INSERT [dbo].[tProducto] ([Consecutivo], [Nombre], [Precio], [Inventario], [Estado], [RutaImagen], [IdCategoria]) VALUES (19, N'Mouse Inalámbrico', CAST(6500.00 AS Decimal(10, 2)), 8, 1, N'/ImgProductos/19.png', 1)
+GO
+INSERT [dbo].[tProducto] ([Consecutivo], [Nombre], [Precio], [Inventario], [Estado], [RutaImagen], [IdCategoria]) VALUES (20, N'Teclado', CAST(8000.00 AS Decimal(10, 2)), 6, 1, N'/ImgProductos/20.png', 1)
+GO
+INSERT [dbo].[tProducto] ([Consecutivo], [Nombre], [Precio], [Inventario], [Estado], [RutaImagen], [IdCategoria]) VALUES (21, N'Teclado', CAST(8000.00 AS Decimal(10, 2)), 6, 1, N'/ImgProductos/20.png', 1)
+GO
+INSERT [dbo].[tProducto] ([Consecutivo], [Nombre], [Precio], [Inventario], [Estado], [RutaImagen], [IdCategoria]) VALUES (22, N'Teclado', CAST(8000.00 AS Decimal(10, 2)), 6, 1, N'/ImgProductos/20.png', 1)
+GO
+INSERT [dbo].[tProducto] ([Consecutivo], [Nombre], [Precio], [Inventario], [Estado], [RutaImagen], [IdCategoria]) VALUES (23, N'Teclado', CAST(8000.00 AS Decimal(10, 2)), 6, 1, N'/ImgProductos/20.png', 1)
+GO
+SET IDENTITY_INSERT [dbo].[tProducto] OFF
+GO
+
 SET IDENTITY_INSERT [dbo].[tRol] ON 
 GO
 INSERT [dbo].[tRol] ([ConsecutivoRol], [NombreRol]) VALUES (1, N'Administrador')
@@ -82,6 +97,8 @@ GO
 SET IDENTITY_INSERT [dbo].[tUsuario] ON 
 GO
 INSERT [dbo].[tUsuario] ([Consecutivo], [Identificacion], [Contrasenna], [Nombre], [CorreoElectronico], [Estado], [Temporal], [Vencimiento], [ConsecutivoRol]) VALUES (1, N'117360383', N'60383', N'AGUERO CALVO KEILYN PAOLA', N'kaguero60383@ufide.ac.cr', 1, 0, CAST(N'2024-03-05T19:39:45.190' AS DateTime), 1)
+GO
+INSERT [dbo].[tUsuario] ([Consecutivo], [Identificacion], [Contrasenna], [Nombre], [CorreoElectronico], [Estado], [Temporal], [Vencimiento], [ConsecutivoRol]) VALUES (2, N'206900400', N'00400', N'HERNANDEZ ARAYA JORGE', N'jhernandez00400@ufide.ac.cr', 1, 0, CAST(N'2024-03-26T20:36:09.623' AS DateTime), 2)
 GO
 SET IDENTITY_INSERT [dbo].[tUsuario] OFF
 GO
@@ -136,6 +153,23 @@ BEGIN
 END
 GO
 
+CREATE PROCEDURE [dbo].[ActualizarUsuario]
+	@Consecutivo		BIGINT,
+	@Contrasenna		VARCHAR(10),
+	@Nombre				VARCHAR(200),
+	@CorreoElectronico	VARCHAR(200)
+AS
+BEGIN
+
+	UPDATE dbo.tUsuario
+	   SET Contrasenna = (CASE WHEN @Contrasenna IS NULL THEN Contrasenna ELSE @Contrasenna END),
+		   Nombre = @Nombre,
+		   CorreoElectronico = @CorreoElectronico
+	 WHERE Consecutivo = @Consecutivo
+
+END
+GO
+
 CREATE PROCEDURE [dbo].[ConsultarProducto]
 	@Consecutivo BIGINT
 AS
@@ -169,13 +203,26 @@ BEGIN
 END
 GO
 
-CREATE PROCEDURE [dbo].[ConsultarTiposCategoria]
+create PROCEDURE [dbo].[ConsultarTiposCategoria]
 
 AS
 BEGIN
 
 	SELECT	IdCategoria, Nombre 'NombreCategoria'
 	FROM	tCategoria
+
+END
+GO
+
+CREATE PROCEDURE [dbo].[ConsultarUsuario]
+	@Consecutivo BIGINT
+AS
+BEGIN
+
+	SELECT	Consecutivo,Identificacion,Nombre,CorreoElectronico,Estado,Temporal,Vencimiento,U.ConsecutivoRol,R.NombreRol
+	FROM	dbo.tUsuario U
+	INNER   JOIN dbo.tRol R ON U.ConsecutivoRol = R.ConsecutivoRol
+	WHERE	Consecutivo = @Consecutivo
 
 END
 GO
@@ -198,7 +245,7 @@ CREATE PROCEDURE [dbo].[IniciarSesionUsuario]
 AS
 BEGIN
 
-	SELECT	Consecutivo,Identificacion,Contrasenna,Nombre,CorreoElectronico,Estado,Temporal,Vencimiento,U.ConsecutivoRol,R.NombreRol
+	SELECT	Consecutivo,Identificacion,Nombre,CorreoElectronico,Estado,Temporal,Vencimiento,U.ConsecutivoRol,R.NombreRol
 	FROM	dbo.tUsuario U
 	INNER   JOIN dbo.tRol R ON U.ConsecutivoRol = R.ConsecutivoRol
 	WHERE	Identificacion = @Identificacion
