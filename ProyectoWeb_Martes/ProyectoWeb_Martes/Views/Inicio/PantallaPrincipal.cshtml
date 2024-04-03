@@ -23,7 +23,7 @@
 
                         @foreach (var item in Model)
                         {
-                            <div class="col-lg-4 col-md-6 col-sm-12" style="margin-bottom: 20px;">
+                            <div class="col-lg-3 col-md-6 col-sm-12" style="margin-bottom: 20px;">
                                 <div class="card">
                                     <div style="text-align: center;">
                                         <img class="card-img-top" src="@item.RutaImagen" style="width:175px; height:175px; margin-top:20px">
@@ -44,10 +44,10 @@
                                                     <div class="col-2">
                                                     </div>
                                                     <div class="col-4">
-                                                        <input type="number" class="form-control" value="1" min="1" max="@item.Inventario" style="text-align:center">
+                                                        <input type="number" id=prd-@item.Consecutivo onkeypress="return ValidarNumeros(this.id)" class="form-control" value="1" min="1" max="@item.Inventario" style="text-align:center">
                                                     </div>
                                                     <div class="col-4">
-                                                        <a href="#" class="card-link btn btn-outline-primary">Agregar</a>
+                                                        <a onclick="AgregarCarrito(@item.Consecutivo);" class="card-link btn btn-outline-primary">Agregar</a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -65,3 +65,33 @@
         </div>
     </div>
 </div>
+
+<script>
+
+    function ValidarNumeros(evt) {
+        var charCode = (evt.which) ? evt.which : event.keyCode;
+        if (charCode >= 48 && charCode <= 57) {
+            return true;
+        }
+        return false;
+    }
+
+    function AgregarCarrito(id) {
+        let cantProducto = $("#prd-" + id).val();
+
+        $.ajax({
+            url: '/Carrito/AgregarCarrito',
+            type: "GET",
+            data:
+            {
+                "idProducto": id,
+                "cantProducto": cantProducto
+            },
+            success: function (data) {
+
+            }
+        });
+
+    }
+
+</script>
