@@ -79,19 +79,28 @@
     function AgregarCarrito(id) {
         let cantProducto = $("#prd-" + id).val();
 
+        if (cantProducto <= 0) {
+            alert("Debe ingresar una cantidad válida");
+            return;
+        }
+
         $.ajax({
             url: '/Carrito/AgregarCarrito',
-            type: "GET",
+            type: "POST",
             data:
             {
                 "idProducto": id,
                 "cantProducto": cantProducto
             },
             success: function (data) {
-
+                if (data == "OK") {
+                    window.location.href = '@Url.Action("PantallaPrincipal", "Inicio")';
+                }
+                else {
+                    alert(data);
+                }
             }
         });
-
     }
 
 </script>

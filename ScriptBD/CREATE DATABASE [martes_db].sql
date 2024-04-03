@@ -7,6 +7,19 @@ GO
 USE [martes_db]
 GO
 
+CREATE TABLE [dbo].[tCarrito](
+	[ConsecutivoCarrito] [bigint] IDENTITY(1,1) NOT NULL,
+	[ConsecutivoUsuario] [bigint] NOT NULL,
+	[ConsecutivoProducto] [bigint] NOT NULL,
+	[FechaCarrito] [datetime] NOT NULL,
+	[Cantidad] [int] NOT NULL,
+ CONSTRAINT [PK_tCarrito] PRIMARY KEY CLUSTERED 
+(
+	[ConsecutivoCarrito] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
 CREATE TABLE [dbo].[tCategoria](
 	[IdCategoria] [int] IDENTITY(1,1) NOT NULL,
 	[Nombre] [varchar](200) NOT NULL,
@@ -59,6 +72,15 @@ CREATE TABLE [dbo].[tUsuario](
 ) ON [PRIMARY]
 GO
 
+SET IDENTITY_INSERT [dbo].[tCarrito] ON 
+GO
+INSERT [dbo].[tCarrito] ([ConsecutivoCarrito], [ConsecutivoUsuario], [ConsecutivoProducto], [FechaCarrito], [Cantidad]) VALUES (1, 2, 19, CAST(N'2024-04-02T20:58:20.870' AS DateTime), 0)
+GO
+INSERT [dbo].[tCarrito] ([ConsecutivoCarrito], [ConsecutivoUsuario], [ConsecutivoProducto], [FechaCarrito], [Cantidad]) VALUES (2, 2, 20, CAST(N'2024-04-02T20:58:26.670' AS DateTime), 0)
+GO
+SET IDENTITY_INSERT [dbo].[tCarrito] OFF
+GO
+
 SET IDENTITY_INSERT [dbo].[tCategoria] ON 
 GO
 INSERT [dbo].[tCategoria] ([IdCategoria], [Nombre]) VALUES (1, N'Periféricos')
@@ -107,6 +129,18 @@ ALTER TABLE [dbo].[tUsuario] ADD  CONSTRAINT [UK_Identificacion] UNIQUE NONCLUST
 (
 	[Identificacion] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[tCarrito]  WITH CHECK ADD  CONSTRAINT [FK_tCarrito_tProducto] FOREIGN KEY([ConsecutivoProducto])
+REFERENCES [dbo].[tProducto] ([Consecutivo])
+GO
+ALTER TABLE [dbo].[tCarrito] CHECK CONSTRAINT [FK_tCarrito_tProducto]
+GO
+
+ALTER TABLE [dbo].[tCarrito]  WITH CHECK ADD  CONSTRAINT [FK_tCarrito_tUsuario] FOREIGN KEY([ConsecutivoUsuario])
+REFERENCES [dbo].[tUsuario] ([Consecutivo])
+GO
+ALTER TABLE [dbo].[tCarrito] CHECK CONSTRAINT [FK_tCarrito_tUsuario]
 GO
 
 ALTER TABLE [dbo].[tProducto]  WITH CHECK ADD  CONSTRAINT [FK_tProducto_tCategorias] FOREIGN KEY([IdCategoria])
@@ -167,6 +201,54 @@ BEGIN
 		   CorreoElectronico = @CorreoElectronico
 	 WHERE Consecutivo = @Consecutivo
 
+END
+GO
+
+CREATE PROCEDURE [dbo].[AgregarCarrito]
+	@ConsecutivoUsuario bigint,
+	@ConsecutivoProducto bigint,
+	@Cantidad	int
+AS
+BEGIN
+
+	IF NOT EXISTS(	SELECT 1 FROM dbo.tCarrito 
+					WHERE	ConsecutivoUsuario = @ConsecutivoUsuario 
+					AND		ConsecutivoProducto = @ConsecutivoProducto)
+	BEGIN
+
+		INSERT INTO dbo.tCarrito(ConsecutivoUsuario,ConsecutivoProducto,FechaCarrito,Cantidad)
+		VALUES (@ConsecutivoUsuario,@ConsecutivoProducto,GETDATE(),@Cantidad)
+
+	END
+	ELSE
+	BEGIN
+		
+		UPDATE	dbo.tCarrito
+		   SET	FechaCarrito = GETDATE(),
+				Cantidad = @Cantidad
+		WHERE	ConsecutivoUsuario = @ConsecutivoUsuario 
+			AND	ConsecutivoProducto = @ConsecutivoProducto
+
+	END
+
+END
+GO
+
+CREATE PROCEDURE [dbo].[ConsultarCarrito]
+	@ConsecutivoUsuario BIGINT
+AS
+BEGIN
+
+	SELECT ConsecutivoCarrito,
+		   ConsecutivoUsuario,
+		   ConsecutivoProducto,
+		   FechaCarrito,
+		   Cantidad,
+		   Cantidad * Precio 'SubTotal'
+	  FROM dbo.tCarrito			C
+	  INNER JOIN dbo.tProducto	P	ON C.ConsecutivoProducto = P.Consecutivo
+	  WHERE ConsecutivoUsuario = @ConsecutivoUsuario
+	
 END
 GO
 

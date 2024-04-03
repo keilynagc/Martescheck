@@ -155,6 +155,7 @@
     <Compile Include="Controllers\InicioController.cs" />
     <Compile Include="Controllers\ProductoController.cs" />
     <Compile Include="Controllers\UsuarioController.cs" />
+    <Compile Include="Entidades\Carrito.cs" />
     <Compile Include="Entidades\Confirmacion.cs" />
     <Compile Include="Entidades\Producto.cs" />
     <Compile Include="Entidades\TiposCategoria.cs" />
@@ -162,6 +163,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\CarritoModel.cs" />
     <Compile Include="Models\FiltroAdmin.cs" />
     <Compile Include="Models\FiltroSeguridad.cs" />
     <Compile Include="Models\ProductoModel.cs" />

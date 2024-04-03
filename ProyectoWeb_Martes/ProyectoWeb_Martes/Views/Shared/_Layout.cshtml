@@ -85,6 +85,11 @@
                         <i class="fa fa-bars"></i>
                     </button>
 
+                    <div style="margin-left:2%; font-size:13pt">
+                        <i class="fa fa-tags"></i>    @Session["Cantidad"].ToString() &nbsp;&nbsp;&nbsp;&nbsp;
+                        <i class="fa fa-credit-card"></i> &nbsp; ¢ @decimal.Parse(Session["SubTotal"].ToString()).ToString("N2") + iva
+                    </div>
+
                     <ul class="navbar-nav ml-auto">
 
                         <li class="nav-item dropdown no-arrow">

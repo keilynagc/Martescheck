@@ -87,6 +87,32 @@ namespace ProyectoApi_Martes.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ActualizarUsuario", consecutivoParameter, contrasennaParameter, nombreParameter, correoElectronicoParameter);
         }
     
+        public virtual int AgregarCarrito(Nullable<long> consecutivoUsuario, Nullable<long> consecutivoProducto, Nullable<int> cantidad)
+        {
+            var consecutivoUsuarioParameter = consecutivoUsuario.HasValue ?
+                new ObjectParameter("ConsecutivoUsuario", consecutivoUsuario) :
+                new ObjectParameter("ConsecutivoUsuario", typeof(long));
+    
+            var consecutivoProductoParameter = consecutivoProducto.HasValue ?
+                new ObjectParameter("ConsecutivoProducto", consecutivoProducto) :
+                new ObjectParameter("ConsecutivoProducto", typeof(long));
+    
+            var cantidadParameter = cantidad.HasValue ?
+                new ObjectParameter("Cantidad", cantidad) :
+                new ObjectParameter("Cantidad", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AgregarCarrito", consecutivoUsuarioParameter, consecutivoProductoParameter, cantidadParameter);
+        }
+    
+        public virtual ObjectResult<ConsultarCarrito_Result> ConsultarCarrito(Nullable<long> consecutivoUsuario)
+        {
+            var consecutivoUsuarioParameter = consecutivoUsuario.HasValue ?
+                new ObjectParameter("ConsecutivoUsuario", consecutivoUsuario) :
+                new ObjectParameter("ConsecutivoUsuario", typeof(long));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ConsultarCarrito_Result>("ConsultarCarrito", consecutivoUsuarioParameter);
+        }
+    
         public virtual ObjectResult<ConsultarProducto_Result> ConsultarProducto(Nullable<long> consecutivo)
         {
             var consecutivoParameter = consecutivo.HasValue ?

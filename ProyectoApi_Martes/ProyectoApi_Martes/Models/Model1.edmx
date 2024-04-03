@@ -22,6 +22,14 @@
           <Parameter Name="Nombre" Type="varchar" Mode="In" />
           <Parameter Name="CorreoElectronico" Type="varchar" Mode="In" />
         </Function>
+        <Function Name="AgregarCarrito" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ConsecutivoUsuario" Type="bigint" Mode="In" />
+          <Parameter Name="ConsecutivoProducto" Type="bigint" Mode="In" />
+          <Parameter Name="Cantidad" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ConsultarCarrito" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ConsecutivoUsuario" Type="bigint" Mode="In" />
+        </Function>
         <Function Name="ConsultarProducto" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Consecutivo" Type="bigint" Mode="In" />
         </Function>
@@ -79,6 +87,14 @@
             <Parameter Name="Nombre" Mode="In" Type="String" />
             <Parameter Name="CorreoElectronico" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="AgregarCarrito">
+            <Parameter Name="ConsecutivoUsuario" Mode="In" Type="Int64" />
+            <Parameter Name="ConsecutivoProducto" Mode="In" Type="Int64" />
+            <Parameter Name="Cantidad" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="ConsultarCarrito" ReturnType="Collection(martes_dbModel.ConsultarCarrito_Result)">
+            <Parameter Name="ConsecutivoUsuario" Mode="In" Type="Int64" />
+          </FunctionImport>
           <FunctionImport Name="ConsultarProducto" ReturnType="Collection(martes_dbModel.ConsultarProducto_Result)">
             <Parameter Name="Consecutivo" Mode="In" Type="Int64" />
           </FunctionImport>
@@ -113,6 +129,14 @@
             <Parameter Name="CorreoElectronico" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
+        <ComplexType Name="ConsultarCarrito_Result">
+          <Property Type="Int64" Name="ConsecutivoCarrito" Nullable="false" />
+          <Property Type="Int64" Name="ConsecutivoUsuario" Nullable="false" />
+          <Property Type="Int64" Name="ConsecutivoProducto" Nullable="false" />
+          <Property Type="DateTime" Name="FechaCarrito" Nullable="false" Precision="23" />
+          <Property Type="Int32" Name="Cantidad" Nullable="false" />
+          <Property Type="Decimal" Name="SubTotal" Nullable="true" Precision="21" Scale="2" />
+        </ComplexType>
         <ComplexType Name="ConsultarProducto_Result">
           <Property Type="Int64" Name="Consecutivo" Nullable="false" />
           <Property Type="String" Name="NombreProducto" Nullable="false" MaxLength="200" />
@@ -178,6 +202,19 @@
           <FunctionImportMapping FunctionImportName="ActualizarImagenProducto" FunctionName="martes_dbModel.Store.ActualizarImagenProducto" />
           <FunctionImportMapping FunctionImportName="ActualizarProducto" FunctionName="martes_dbModel.Store.ActualizarProducto" />
           <FunctionImportMapping FunctionImportName="ActualizarUsuario" FunctionName="martes_dbModel.Store.ActualizarUsuario" />
+          <FunctionImportMapping FunctionImportName="AgregarCarrito" FunctionName="martes_dbModel.Store.AgregarCarrito" />
+          <FunctionImportMapping FunctionImportName="ConsultarCarrito" FunctionName="martes_dbModel.Store.ConsultarCarrito">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="martes_dbModel.ConsultarCarrito_Result">
+                <ScalarProperty Name="ConsecutivoCarrito" ColumnName="ConsecutivoCarrito" />
+                <ScalarProperty Name="ConsecutivoUsuario" ColumnName="ConsecutivoUsuario" />
+                <ScalarProperty Name="ConsecutivoProducto" ColumnName="ConsecutivoProducto" />
+                <ScalarProperty Name="FechaCarrito" ColumnName="FechaCarrito" />
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+                <ScalarProperty Name="SubTotal" ColumnName="SubTotal" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="ConsultarProducto" FunctionName="martes_dbModel.Store.ConsultarProducto">
             <ResultMapping>
               <ComplexTypeMapping TypeName="martes_dbModel.ConsultarProducto_Result">

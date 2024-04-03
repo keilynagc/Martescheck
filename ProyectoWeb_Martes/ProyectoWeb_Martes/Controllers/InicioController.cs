@@ -1,6 +1,7 @@
 ﻿using ProyectoWeb_Martes.Entidades;
 using ProyectoWeb_Martes.Models;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 
 namespace ProyectoWeb_Martes.Controllers
@@ -10,6 +11,7 @@ namespace ProyectoWeb_Martes.Controllers
     {
         UsuarioModel modelo = new UsuarioModel();
         ProductoModel productoModel = new ProductoModel();
+        CarritoModel carritoModel = new CarritoModel();
 
         [HttpGet]
         public ActionResult IniciarSesion()
@@ -24,6 +26,10 @@ namespace ProyectoWeb_Martes.Controllers
 
             if (respuesta.Codigo == 0)
             {
+                var datos = carritoModel.ConsultarCarrito(respuesta.Dato.Consecutivo);
+                Session["Cantidad"] = datos.Datos.AsEnumerable().Sum(x => x.Cantidad);
+                Session["SubTotal"] = datos.Datos.AsEnumerable().Sum(x => x.SubTotal);
+
                 Session["Consecutivo"] = respuesta.Dato.Consecutivo;
                 Session["NombreUsuario"] = respuesta.Dato.Nombre;
                 Session["RolUsuario"] = respuesta.Dato.ConsecutivoRol;
